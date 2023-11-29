@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import './App.css';
-import LikeBtn from './LikeBtn';
+import FilterBtn from './FilterBtn';
 
 const collection = [{
   img: "https://raw.githubusercontent.com/netology-code/ra16-homeworks/master/events-state/filter/img/mon.jpg",
@@ -57,14 +58,29 @@ const collection = [{
 
 
 function App() {
+
+  const arr = ['All', 'Flayers', 'Websites', 'Business Cards'];
+
+  const [selectedButton, setSelectedButton] = useState('All');
+
+  const handleButtonClick = (buttonName) => {
+    setSelectedButton(buttonName);
+  };
+
   return (
-    <>
-      {collection.map(item => (
-        <LikeBtn img={item.img} />
-      ))}
-    </>
+    <div className='container'>
+      {arr.map((i, index) => 
+      <FilterBtn 
+        key={index} 
+        name={i}
+        onClick={() => handleButtonClick(i)}/>)}
+      <div className='SelectBox'>{ selectedButton === 'All' ? (
+        collection.map((item, index) => <img className='SelectBoxImg' key={index} src={item.img}></img>)
+      ) :
+      collection.filter(i => i.category === selectedButton).map((item, index) => <img key={index} src={item.img}></img>)
+      }</div>
+    </div>
   );
 }
-
 
 export default App;

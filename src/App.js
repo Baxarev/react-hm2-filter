@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import './App.css';
-import FilterBtn from './FilterBtn';
+import Toolbar from './Toolbar';
+import ProjectList from './ProjectList';
 
-const collection = [{
+const projectsData = [{
   img: "https://raw.githubusercontent.com/netology-code/ra16-homeworks/master/events-state/filter/img/mon.jpg",
   category: "Business Cards"
 }, {
@@ -55,32 +56,33 @@ const collection = [{
   category: "Flayers"
 }]
 
+const Portfolio = () => {
 
+  const [selectFilter, setSelectFilter] = useState('All');
 
-function App() {
-
-  const arr = ['All', 'Flayers', 'Websites', 'Business Cards'];
-
-  const [selectedButton, setSelectedButton] = useState('All');
-
-  const handleButtonClick = (buttonName) => {
-    setSelectedButton(buttonName);
-  };
+  const filteredProjects =
+   selectFilter === 'All'
+    ? projectsData
+    : projectsData.filter(project => project.category === selectFilter);
 
   return (
     <div className='container'>
-      {arr.map((i, index) => 
-      <FilterBtn 
-        key={index} 
-        name={i}
-        onClick={() => handleButtonClick(i)}/>)}
-      <div className='SelectBox'>{ selectedButton === 'All' ? (
-        collection.map((item, index) => <img className='SelectBoxImg' key={index} src={item.img}></img>)
-      ) :
-      collection.filter(i => i.category === selectedButton).map((item, index) => <img key={index} src={item.img}></img>)
-      }</div>
+      <Toolbar 
+        filters={["All", "Websites", "Flayers", "Business Cards"]}
+        selected={selectFilter}
+        onSelectFilter={setSelectFilter}/>
+      < ProjectList projects={filteredProjects} />
     </div>
-  );
+  )
+}
+
+const App = () => {
+
+  return (
+    <>
+      <Portfolio />
+    </>
+  )
 }
 
 export default App;
